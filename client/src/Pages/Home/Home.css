@@ -1,0 +1,10 @@
+.home-container {
+    margin-top: 12px;
+    margin-left: 4%;
+    margin-right: 4%;
+}
+
+.logout-container {
+    display: flex;
+    justify-content: flex-end;
+}

@@ -1,0 +1,89 @@
+package controller
+
+import (
+	"morales-backend-1/database"
+	"morales-backend-1/model"
+	"morales-backend-1/service"
+	"net/http"
+	"net/mail"
+	"time"
+
+	"github.com/gin-gonic/gin"
+)
+
+type HomeController interface {
+	Register(ctx *gin.Context)
+	Login(ctx *gin.Context)
+}
+
+type homeController struct {
+	jWtService service.JWTService
+}
+
+func HomeHandler(jWtService service.JWTService) HomeController {
+	return &homeController{
+		jWtService: jWtService,
+	}
+}
+
+func (controller homeController) Login(ctx *gin.Context) {
+	var input model.LoginAttempt
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user model.User
+
+	// check if the is an user with the provided email
+	if err := database.Conn.Where(model.User{Email: input.Email}).First(&user).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	var token string
+
+	if service.AuthenticateAgainstHash(input.Password, user.Password) {
+		token = controller.jWtService.GenerateToken(user.Email, true)
+	}
+
+	if token != "" {
+		ctx.JSON(http.StatusOK, gin.H{
+			"token": token,
+		})
+	} else {
+		ctx.JSON(http.StatusUnauthorized, nil)
+	}
+}
+
+func (controller homeController) Register(c *gin.Context) {
+	var input model.RegistrationAttempt
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if _, err := mail.ParseAddress(input.Email); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email provided is not valid."})
+		return
+	}
+
+	user := model.User{Email: input.Email, InsertDate: time.Now()}
+
+	if hashedPassword, err := service.HashPassword(input.Password); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+		user.Password = hashedPassword
+	}
+
+	if err := database.Conn.Where(model.User{Email: input.Email}).
+		FirstOrCreate(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
+}

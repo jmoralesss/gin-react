@@ -5,3 +5,4 @@ client/build
 .DS_Store
 
 server/main
+server/array.db

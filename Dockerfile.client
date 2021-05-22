@@ -1,0 +1,20 @@
+# base image
+FROM node:12.2.0-alpine
+
+# add `//node_modules/.bin` to $PATH
+ENV PATH ./node_modules/.bin:$PATH
+
+# set working directory
+WORKDIR /client
+
+RUN mkdir /client/.cert
+
+COPY /.cert ./.cert
+COPY /client ./
+
+RUN npm install --silent
+
+CMD ["npm", "start"]
+
+#docker build -t array-client -f Dockerfile.client .
+#docker run -it -p 80:3000 array-client 

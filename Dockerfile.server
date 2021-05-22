@@ -1,0 +1,9 @@
+FROM golang:alpine
+
+WORKDIR /server
+
+RUN mkdir /server/.cert
+
+COPY /.cert ./.cert
+COPY /server ./
+

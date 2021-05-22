@@ -33,7 +33,7 @@ export class Register extends React.Component<FormEntryProps, FormEntryState> {
 
             this.props.history.push("/");
         }, err => {
-            toast.error(err.response.data.error);
+            toast.error("Error occured processing your request!");
         })
     }
 

@@ -7,7 +7,7 @@ RUN apk add build-base
 RUN mkdir /server/.cert
 
 COPY /.cert ./.cert
-COPY /server ./
+COPY / ./
 
 RUN go mod download
 RUN go mod verify

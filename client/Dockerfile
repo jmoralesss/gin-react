@@ -5,10 +5,10 @@ FROM node:12.16.1-alpine3.9 as build
 WORKDIR /app
 RUN mkdir /app/.cert
 ENV PATH /app/node_modules/.bin:$PATH
-COPY /client/package.json /app
-COPY /client/package-lock.json /app
+COPY /package.json /app
+COPY /package-lock.json /app
 COPY /.cert /app/.cert
-COPY /client /app
+COPY / /app
 RUN npm install --silent
 RUN npm run build
 

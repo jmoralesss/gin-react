@@ -6,6 +6,7 @@ import (
 	"morales-backend-1/database"
 	"morales-backend-1/service"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,6 +21,10 @@ func main() {
 
 	router.Use(CORSMiddleware())
 
+	router.GET("/keep-alive", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": time.Now()})
+	})
+
 	router.POST("/login", homeController.Login)
 	router.POST("/register", homeController.Register)
 
@@ -31,7 +36,7 @@ func main() {
 
 	database.ConnectDatabase()
 
-	router.RunTLS(":443", "/Users/jonathanmorales/repos/morales-backend-1/.cert/cert.pem", "/Users/jonathanmorales/repos/morales-backend-1/.cert/key.pem")
+	router.RunTLS(":443", "./.cert/cert.pem", "./.cert/key.pem")
 }
 
 func BearerTokenMiddleware(jwtService service.JWTService) gin.HandlerFunc {

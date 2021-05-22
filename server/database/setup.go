@@ -1,27 +1,28 @@
 package database
 
 import (
-	"gorm.io/driver/mysql"
+	"io/ioutil"
+
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var Conn *gorm.DB
 
-const DB_USERNAME = "array_user"
-const DB_PASSWORD = "password123"
-const DB_NAME = "array"
-const DB_HOST = "127.0.0.1"
-const DB_PORT = "3306"
-
 func ConnectDatabase() {
-	var err error
-	dsn := DB_USERNAME + ":" + DB_PASSWORD + "@tcp" + "(" + DB_HOST + ":" + DB_PORT + ")/" + DB_NAME + "?" + "parseTime=true&loc=Local"
-
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("array.db"), &gorm.Config{})
 
 	if err != nil {
-		panic("Failed to connect to database!")
+		panic(err.Error())
 	}
+
+	file, err := ioutil.ReadFile("database/PostDeploy.sql")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	db.Exec(string(file))
 
 	Conn = db
 }

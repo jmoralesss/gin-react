@@ -16,5 +16,5 @@ RUN npm install --silent
 
 CMD ["npm", "start"]
 
-#docker build -t array-client -f Dockerfile.client .
-#docker run -it -p 80:3000 array-client 
+# docker build -t array-client -f Dockerfile.client .
+# docker run -it -p 3000:3000 array-client 

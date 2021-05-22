@@ -7,3 +7,11 @@ RUN mkdir /server/.cert
 COPY /.cert ./.cert
 COPY /server ./
 
+RUN go mod download
+RUN go mod verify
+RUN go build -o array-server
+
+CMD ./array-server
+
+# docker build -t array-server -f Dockerfile.server .
+# docker run -it -p 443:443 array-server 

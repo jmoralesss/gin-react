@@ -3,7 +3,7 @@ services:
     client:
             image: jmoralesss/client
             ports:
-                - 300:300
+                - 300:3000
             depends_on:
                 - server
     server:

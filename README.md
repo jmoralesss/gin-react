@@ -1,6 +1,6 @@
 # morales-backend-1
 
-## Run following commands to setup and run
+### Run the following commands to setup and run
 1. `docker pull jmoralesss/client`
 2. `docker pull jmoralesss/server`
 3. `docker-compose up`

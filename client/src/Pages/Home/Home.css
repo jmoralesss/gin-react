@@ -4,6 +4,11 @@
     margin-right: 4%;
 }
 
+.home-container > h1 {
+    text-align: center;
+    color: white;
+}
+
 .logout-container {
     display: flex;
     justify-content: flex-end;

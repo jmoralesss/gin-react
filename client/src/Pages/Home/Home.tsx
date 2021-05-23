@@ -34,6 +34,7 @@ export class Home extends React.Component<{}, HomeState> {
                 <div className="logout-container">
                     <button onClick={this.logout}>Logout</button>
                 </div>
+                <h1>Successfully logged in</h1>
             </div>
         )
     }

@@ -25,7 +25,7 @@ export class Login extends React.Component<{}, FormEntryState> {
         event.preventDefault();
 
         HomeService.login(this.state).then((res: any) => {
-            window.location.assign("/home");
+            window.location.assign("/members");
         }, err => {
             toast.error("Wrong email or password");
         })

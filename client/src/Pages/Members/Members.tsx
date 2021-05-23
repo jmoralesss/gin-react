@@ -1,10 +1,10 @@
 import React from 'react';
 import { MemberService } from '../../Services/Member.service'
-import './Home.css'
+import './Members.css'
 import { toast } from 'react-toastify';
-import { HomeState } from '../../Types/Home.type'
+import { MembersState } from '../../Types/MembersState.type'
 
-export class Home extends React.Component<{}, HomeState> {
+export class Members extends React.Component<{}, MembersState> {
     constructor(props: any) {
         super(props)
 

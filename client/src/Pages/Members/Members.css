@@ -9,6 +9,33 @@
     color: white;
 }
 
+.home-container > table {
+    margin-top: 10px;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.home-container thead tr {
+    background-color: #110630;
+    color: #ffffff;
+    text-align: left;
+}
+
+.home-container th,
+.home-container td {
+    padding: 12px 15px;
+}
+
+.home-container tbody tr:nth-of-type(even) {
+    background-color: #dddddd;
+}
+
+.home-container tbody tr:nth-of-type(odd) {
+    background-color: #f3f3f3;
+}
+
 .logout-container {
     display: flex;
     justify-content: flex-end;

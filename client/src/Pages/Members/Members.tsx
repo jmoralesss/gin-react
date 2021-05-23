@@ -3,6 +3,7 @@ import { MemberService } from '../../Services/Member.service'
 import './Members.css'
 import { toast } from 'react-toastify';
 import { MembersState } from '../../Types/MembersState.type'
+import { Member } from '../../Types/Member.type'
 
 export class Members extends React.Component<{}, MembersState> {
     constructor(props: any) {
@@ -16,16 +17,28 @@ export class Members extends React.Component<{}, MembersState> {
     }
 
     componentDidMount(): void {
-        MemberService.getMembers().then(res => {
-            this.setState({ members: res.data})
+        MemberService.getMembers().then((res: any) => {
+            const members: Member[] = res.data.map((member: any) => ({ email: member.Email, insertDate: new Date(member.InsertDate).toLocaleString() }))
+
+            this.setState({ members: members })
         })
-        console.log(this.state.members)
     }
 
-    logout() {
+    logout(): void {
         sessionStorage.removeItem('token')
 
         window.location.assign("/");
+    }
+
+    renderTableData() {
+        return this.state.members.map((member, index) => {
+            return (
+                <tr key={index}>
+                    <td>{member.email}</td>
+                    <td>{member.insertDate}</td>
+                </tr>
+            )
+        })
     }
 
     render(): JSX.Element {
@@ -34,7 +47,17 @@ export class Members extends React.Component<{}, MembersState> {
                 <div className="logout-container">
                     <button onClick={this.logout}>Logout</button>
                 </div>
-                <h1>Successfully logged in</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Registration Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.renderTableData()}
+                    </tbody>
+                </table>
             </div>
         )
     }

@@ -11,7 +11,6 @@
     * The client is served using nginx
 * Front-End
     * I created a react app using the `npx create-react-app my-app --template typescript` template
-    * The client is signed out once the bearer token is expired
 * Back-End
     * Gin for the API framework
         * A bearer token is passed back to the client once the user is authenticated

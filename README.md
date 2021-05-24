@@ -3,8 +3,6 @@
 ### Run the following commands to setup and run
 1. Pull down repo
 2. Go to the root of repo
-1. Run `docker pull jmoralesss/client`
-2. Run `docker pull jmoralesss/server`
 3. Run `docker-compose up -d`
 4. Visit `https://localhost:8080/` in your browser
 

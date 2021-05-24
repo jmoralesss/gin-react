@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"fmt"
 	"morales-backend-1/database"
 	"morales-backend-1/model"
 	"morales-backend-1/service"
 	"net/http"
-	"net/mail"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -36,7 +36,7 @@ func (controller homeController) Login(ctx *gin.Context) {
 
 	var user model.User
 
-	// check if the is an user with the provided email
+	// check if there is an user with the provided email
 	if err := database.Conn.Where(model.User{Email: input.Email}).First(&user).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
@@ -65,13 +65,20 @@ func (controller homeController) Register(c *gin.Context) {
 		return
 	}
 
-	if _, err := mail.ParseAddress(input.Email); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Email provided is not valid."})
+	// check if provided email is already associated with a member
+	var count int64
+	if err := database.Conn.Model(&model.User{}).Select("ID").Where(fmt.Sprintf("%s = ?", "Email"), input.Email).Count(&count).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if count > 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error occured processing your request"})
 		return
 	}
 
 	user := model.User{Email: input.Email, InsertDate: time.Now()}
 
+	// create hashed password from provided password
 	if hashedPassword, err := service.HashPassword(input.Password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -79,8 +86,8 @@ func (controller homeController) Register(c *gin.Context) {
 		user.Password = hashedPassword
 	}
 
-	if err := database.Conn.Where(model.User{Email: input.Email}).
-		FirstOrCreate(&user).Error; err != nil {
+	// create new user record
+	if err := database.Conn.Where(model.User{Email: input.Email}).FirstOrCreate(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

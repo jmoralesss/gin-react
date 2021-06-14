@@ -36,7 +36,7 @@ func (controller homeController) Login(ctx *gin.Context) {
 
 	var user model.User
 
-	// check if there is an user with the provided email
+	// check if there is a user with the provided email
 	if err := database.Conn.Where(model.User{Email: input.Email}).First(&user).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return

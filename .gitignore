@@ -6,3 +6,6 @@ client/build
 
 server/main
 server/array.db
+server/.cert/cert.pem
+.gitignore
+server/.cert/key.pem

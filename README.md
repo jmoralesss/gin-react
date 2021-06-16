@@ -18,4 +18,3 @@
     * Sqlite for the database
         * When a user creates an account the provided password is hashed using the `golang.org/x/crypto/bcrypt` package and then stored in the db
 
-### Dev time was about half a day

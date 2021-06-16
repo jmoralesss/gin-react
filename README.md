@@ -1,4 +1,4 @@
-# morales-backend-1
+# gin-react
 
 ### Run the following commands to setup and run
 1. Pull down repo
